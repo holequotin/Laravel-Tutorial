@@ -10,5 +10,8 @@
             <p>The list is empty</p>
         @endunless
     </div>
+    <div>
+        {{$listings->links()}}
+    </div>
 </x-layout>
 
