@@ -50,8 +50,9 @@ class ListingController extends Controller
             'website' => ['required','url'],
             'tags' => ['required','regex:/^[a-zA-Z]+(,[a-zA-Z]+)*$/'],
             'description' => ['required','min:20'],
-        ]
-        );
+        ]);
+        Listing::create($validated);
+        return redirect(route('listings.index'));
     }
 
     /**

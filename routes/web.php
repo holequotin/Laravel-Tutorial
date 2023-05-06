@@ -21,7 +21,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/list',[ListingController::class,'index']);
+Route::get('/list',[ListingController::class,'index'])->name('listings.index');
 //url with parameter
 Route::get('/about/{listing}',[ListingController::class,'show']);
 

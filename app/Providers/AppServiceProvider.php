@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\View\Components\Button;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Blade::component('button',Button::class);
+        Model::unguard();
     }
 }
