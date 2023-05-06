@@ -52,7 +52,7 @@ class ListingController extends Controller
             'description' => ['required','min:20'],
         ]);
         Listing::create($validated);
-        return redirect(route('listings.index'));
+        return redirect(route('listings.index'))->with('message','Posted Job');
     }
 
     /**
