@@ -29,6 +29,10 @@ Route::get('/about/{listing}',[ListingController::class,'show']);
 
 // Route::resource('listing',ListingController::class);
 
+Route::get('/create',[ListingController::class,'create'])->name('listings.create');
+
+Route::post('/store',[ListingController::class,'store'])->name('listings.store');
+
 Route::get('button',function () {
     return view('buttontest');
 });

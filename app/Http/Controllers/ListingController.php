@@ -30,6 +30,7 @@ class ListingController extends Controller
     public function create()
     {
         //
+        return view('listings.create');
     }
 
     /**
@@ -41,6 +42,16 @@ class ListingController extends Controller
     public function store(Request $request)
     {
         //
+        $validated = $request->validate([
+            'company' => 'required',
+            'title' => ['required','min:5','max:50'],
+            'location' => ['required'],
+            'email' => ['email','required'],
+            'website' => ['required','url'],
+            'tags' => ['required','regex:/^[a-zA-Z]+(,[a-zA-Z]+)*$/'],
+            'description' => ['required','min:20'],
+        ]
+        );
     }
 
     /**
