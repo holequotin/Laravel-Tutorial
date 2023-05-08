@@ -51,6 +51,9 @@ class ListingController extends Controller
             'tags' => ['required','regex:/^[a-zA-Z]+(,[a-zA-Z]+)*$/'],
             'description' => ['required','min:20'],
         ]);
+        if($request->hasFile('logo')){
+            $validated['logo'] = $request->file('logo')->store('logos','public');
+        }
         Listing::create($validated);
         return redirect(route('listings.index'))->with('message','Posted Job');
     }
