@@ -54,6 +54,7 @@ class ListingController extends Controller
         if($request->hasFile('logo')){
             $validated['logo'] = $request->file('logo')->store('logos','public');
         }
+        $validated['user_id'] = auth()->user()->id;
         Listing::create($validated);
         return redirect(route('listings.index'))->with('message','Posted Job');
     }
@@ -79,9 +80,15 @@ class ListingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Listing $listing)
     {
         //
+        if($listing->user_id != auth()->user()->id){
+            abort(403,'Unauthorized action');
+        }
+        return view('listings.edit',[
+            'listing' => $listing
+        ]);
     }
 
     /**
@@ -91,9 +98,26 @@ class ListingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Listing $listing)
     {
         //
+        if($listing->user_id != auth()->user()->id){
+            abort(403,'Unauthorized action');
+        }
+        $validated = $request->validate([
+            'company' => 'required',
+            'title' => ['required','min:5','max:50'],
+            'location' => ['required'],
+            'email' => ['email','required'],
+            'website' => ['required','url'],
+            'tags' => ['required','regex:/^[a-zA-Z]+(,[a-zA-Z]+)*$/'],
+            'description' => ['required','min:20'],
+        ]);
+        if($request->hasFile('logo')){
+            $validated['logo'] = $request->file('logo')->store('logos','public');
+        }
+        $listing->update($validated);
+        return back()->with('message','Listing update successfully');
     }
 
     /**
@@ -102,8 +126,19 @@ class ListingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Listing $listing)
     {
         //
+        if($listing->user_id != auth()->user()->id){
+            abort(403,'Unauthorized action');
+        }
+        $listing->delete();
+        return redirect(route('listings.index'))->with('message','Listing delete successfuly');
+    }
+    public function manage(Request $request)
+    {
+        return view('listings.manage',[
+            'listings' => $request->user()->listings()->get()
+        ]);
     }
 }
